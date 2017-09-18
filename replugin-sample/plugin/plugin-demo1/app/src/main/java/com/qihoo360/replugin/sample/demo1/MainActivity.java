@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -161,6 +162,8 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent();
                 intent.setComponent(new ComponentName("demo2", "com.qihoo360.replugin.sample.demo2.activity.for_result.ForResultActivity"));
                 MainActivity.this.startActivityForResult(intent, REQUEST_CODE_DEMO2);
+                // 也可以这么用
+                // RePlugin.startActivityForResult(MainActivity.this, intent, REQUEST_CODE_DEMO2);
             }
         }));
         mItems.add(new TestItem("Activity: By Action", new View.OnClickListener() {
@@ -210,6 +213,15 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), PluginDemoService1.class);
                 intent.setAction("action1");
+                v.getContext().startService(intent);
+            }
+        }));
+        mItems.add(new TestItem("Service: Implicit Start (at :UI process)", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setPackage("com.qihoo360.replugin.sample.demo1");
+                intent.setAction("com.qihoo360.replugin.sample.demo1.action.XXXX");
                 v.getContext().startService(intent);
             }
         }));
@@ -275,7 +287,7 @@ public class MainActivity extends Activity {
         mItems.add(new TestItem("Resources: Use demo2's layout", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View contentView = RePlugin.fetchViewByLayoutName("demo2", "from_demo1", null);
+                LinearLayout contentView = RePlugin.fetchViewByLayoutName("demo2", "from_demo1", null);
                 if (contentView == null) {
                     Toast.makeText(v.getContext(), "from_demo1 Not Found", Toast.LENGTH_SHORT).show();
                     return;
